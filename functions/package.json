@@ -1,0 +1,13 @@
+{
+  "name": "fee-management-functions",
+  "version": "1.0.0",
+  "description": "Student fee management API on Azure Functions",
+  "main": "src/functions/*.js",
+  "scripts": {
+    "start": "func start"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.5.0",
+    "mssql": "^11.0.1"
+  }
+}

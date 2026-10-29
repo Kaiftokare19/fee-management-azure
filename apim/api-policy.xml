@@ -1,0 +1,22 @@
+<!--
+  Fee API > All operations > Inbound processing > </>
+  Keep the set-backend-service line API Management added when importing the Function App;
+  only add the rate-limit line.
+-->
+<policies>
+    <inbound>
+        <base />
+        <!-- keep the set-backend-service line APIM added here -->
+        <!-- Max 10 calls per minute per subscription key; call 11 gets HTTP 429 -->
+        <rate-limit calls="10" renewal-period="60" />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

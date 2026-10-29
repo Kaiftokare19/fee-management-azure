@@ -1,0 +1,38 @@
+﻿<!--
+  Apply to the admin_update_fee and admin_list_students operations (Inbound processing > </>).
+  Tenant ID and fee-api client ID are filled in below; they identify the API and are not secrets.
+  Keep the set-backend-service line that API Management generated for each operation.
+-->
+<policies>
+    <inbound>
+        <base />
+        <validate-jwt header-name="Authorization" failed-validation-httpcode="401"
+                      failed-validation-error-message="Admin token missing, invalid or without Fee.Admin role"
+                      output-token-variable-name="jwt">
+            <openid-config url="https://login.microsoftonline.com/019be382-2033-4602-863e-2ff2afa0b0c4/v2.0/.well-known/openid-configuration" />
+            <audiences>
+                <audience>cca19e0b-0da0-41ea-8302-b3503e55bcb1</audience>
+                <audience>api://cca19e0b-0da0-41ea-8302-b3503e55bcb1</audience>
+            </audiences>
+            <required-claims>
+                <claim name="roles" match="any">
+                    <value>Fee.Admin</value>
+                </claim>
+            </required-claims>
+        </validate-jwt>
+        <!-- Pass the verified caller to the function for the audit log; overrides anything the caller sent -->
+        <set-header name="X-Changed-By" exists-action="override">
+            <value>@(((Jwt)context.Variables["jwt"]).Claims.GetValueOrDefault("azp", "unknown"))</value>
+        </set-header>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
+
